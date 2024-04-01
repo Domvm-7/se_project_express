@@ -14,6 +14,15 @@ mongoose
   })
   .catch(console.error);
 
+// Middleware to set user ID
+app.use((req, res, next) => {
+  // Set the user ID as required
+  req.user = {
+    _id: "660b2c81a1ff1ff2e2eabfb2",
+  };
+  next();
+});
+
 app.use(express.json());
 
 app.use("/", mainRouter);
