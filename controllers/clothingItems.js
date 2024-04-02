@@ -5,10 +5,12 @@ const ClothingItem = require("../models/clothingItem");
 exports.getItems = async (req, res) => {
   try {
     const items = await ClothingItem.find({});
-    res.json(items);
+    return res.json(items);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "An error occurred on the server." });
+    return res
+      .status(500)
+      .json({ message: "An error occurred on the server." });
   }
 };
 
@@ -21,18 +23,17 @@ exports.createItem = async (req, res) => {
       owner: req.user._id, // assuming temporary workaround is in place
     });
     const savedItem = await newItem.save();
-    return res.status(201).json(savedItem); // Added return statement
+    return res.status(201).json(savedItem);
   } catch (err) {
     if (err.name === "ValidationError") {
       return res
         .status(400)
-        .json({ message: "Invalid data passed to create item." }); // Added return statement
-    } else {
-      console.error(err);
-      return res
-        .status(500)
-        .json({ message: "An error occurred on the server." }); // Added return statement
+        .json({ message: "Invalid data passed to create item." });
     }
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: "An error occurred on the server." });
   }
 };
 
@@ -42,16 +43,15 @@ exports.deleteItem = async (req, res) => {
     if (!deletedItem) {
       return res.status(404).json({ message: "Item not found." });
     }
-    return res.json({ message: "Item deleted." }); // Added return statement
+    return res.json({ message: "Item deleted." });
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(400).json({ message: "Invalid item ID." }); // Added return statement
-    } else {
-      console.error(err);
-      return res
-        .status(500)
-        .json({ message: "An error occurred on the server." }); // Added return statement
+      return res.status(400).json({ message: "Invalid item ID." });
     }
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: "An error occurred on the server." });
   }
 };
 
@@ -65,16 +65,15 @@ exports.likeItem = async (req, res) => {
     if (!updatedItem) {
       return res.status(404).json({ message: "Item not found." });
     }
-    return res.json(updatedItem); // Added return statement
+    return res.json(updatedItem);
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(400).json({ message: "Invalid item ID." }); // Added return statement
-    } else {
-      console.error(err);
-      return res
-        .status(500)
-        .json({ message: "An error occurred on the server." }); // Added return statement
+      return res.status(400).json({ message: "Invalid item ID." });
     }
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: "An error occurred on the server." });
   }
 };
 
@@ -88,15 +87,14 @@ exports.dislikeItem = async (req, res) => {
     if (!updatedItem) {
       return res.status(404).json({ message: "Item not found." });
     }
-    return res.json(updatedItem); // Added return statement
+    return res.json(updatedItem);
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(400).json({ message: "Invalid item ID." }); // Added return statement
-    } else {
-      console.error(err);
-      return res
-        .status(500)
-        .json({ message: "An error occurred on the server." }); // Added return statement
+      return res.status(400).json({ message: "Invalid item ID." });
     }
+    console.error(err);
+    return res
+      .status(500)
+      .json({ message: "An error occurred on the server." });
   }
 };
