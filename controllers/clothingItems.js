@@ -1,7 +1,6 @@
 // controllers/clothingItems.js
 
 const ClothingItem = require("../models/clothingItem");
-const { BadRequestError } = require("../utils/errors");
 
 exports.getItems = async (req, res) => {
   try {
@@ -22,13 +21,17 @@ exports.createItem = async (req, res) => {
       owner: req.user._id, // assuming temporary workaround is in place
     });
     const savedItem = await newItem.save();
-    res.status(201).json(savedItem);
+    return res.status(201).json(savedItem); // Added return statement
   } catch (err) {
     if (err.name === "ValidationError") {
-      res.status(400).json({ message: "Invalid data passed to create item." });
+      return res
+        .status(400)
+        .json({ message: "Invalid data passed to create item." }); // Added return statement
     } else {
       console.error(err);
-      res.status(500).json({ message: "An error occurred on the server." });
+      return res
+        .status(500)
+        .json({ message: "An error occurred on the server." }); // Added return statement
     }
   }
 };
@@ -39,13 +42,15 @@ exports.deleteItem = async (req, res) => {
     if (!deletedItem) {
       return res.status(404).json({ message: "Item not found." });
     }
-    res.json({ message: "Item deleted." });
+    return res.json({ message: "Item deleted." }); // Added return statement
   } catch (err) {
     if (err.name === "CastError") {
-      res.status(400).json({ message: "Invalid item ID." });
+      return res.status(400).json({ message: "Invalid item ID." }); // Added return statement
     } else {
       console.error(err);
-      res.status(500).json({ message: "An error occurred on the server." });
+      return res
+        .status(500)
+        .json({ message: "An error occurred on the server." }); // Added return statement
     }
   }
 };
@@ -60,13 +65,15 @@ exports.likeItem = async (req, res) => {
     if (!updatedItem) {
       return res.status(404).json({ message: "Item not found." });
     }
-    res.json(updatedItem);
+    return res.json(updatedItem); // Added return statement
   } catch (err) {
     if (err.name === "CastError") {
-      res.status(400).json({ message: "Invalid item ID." });
+      return res.status(400).json({ message: "Invalid item ID." }); // Added return statement
     } else {
       console.error(err);
-      res.status(500).json({ message: "An error occurred on the server." });
+      return res
+        .status(500)
+        .json({ message: "An error occurred on the server." }); // Added return statement
     }
   }
 };
@@ -81,13 +88,15 @@ exports.dislikeItem = async (req, res) => {
     if (!updatedItem) {
       return res.status(404).json({ message: "Item not found." });
     }
-    res.json(updatedItem);
+    return res.json(updatedItem); // Added return statement
   } catch (err) {
     if (err.name === "CastError") {
-      res.status(400).json({ message: "Invalid item ID." });
+      return res.status(400).json({ message: "Invalid item ID." }); // Added return statement
     } else {
       console.error(err);
-      res.status(500).json({ message: "An error occurred on the server." });
+      return res
+        .status(500)
+        .json({ message: "An error occurred on the server." }); // Added return statement
     }
   }
 };
