@@ -1,5 +1,7 @@
 // controllers/clothingItems.js
+
 const ClothingItem = require("../models/clothingItem");
+const { BadRequestError } = require("../utils/errors");
 
 exports.getItems = async (req, res) => {
   try {
@@ -22,8 +24,12 @@ exports.createItem = async (req, res) => {
     const savedItem = await newItem.save();
     res.status(201).json(savedItem);
   } catch (err) {
-    console.error(err);
-    res.status(400).json({ message: "Invalid data passed to create item." });
+    if (err.name === "ValidationError") {
+      res.status(400).json({ message: "Invalid data passed to create item." });
+    } else {
+      console.error(err);
+      res.status(500).json({ message: "An error occurred on the server." });
+    }
   }
 };
 
@@ -35,8 +41,12 @@ exports.deleteItem = async (req, res) => {
     }
     res.json({ message: "Item deleted." });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "An error occurred on the server." });
+    if (err.name === "CastError") {
+      res.status(400).json({ message: "Invalid item ID." });
+    } else {
+      console.error(err);
+      res.status(500).json({ message: "An error occurred on the server." });
+    }
   }
 };
 
@@ -47,10 +57,17 @@ exports.likeItem = async (req, res) => {
       { $addToSet: { likes: req.user._id } },
       { new: true },
     );
+    if (!updatedItem) {
+      return res.status(404).json({ message: "Item not found." });
+    }
     res.json(updatedItem);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "An error occurred on the server." });
+    if (err.name === "CastError") {
+      res.status(400).json({ message: "Invalid item ID." });
+    } else {
+      console.error(err);
+      res.status(500).json({ message: "An error occurred on the server." });
+    }
   }
 };
 
@@ -61,9 +78,16 @@ exports.dislikeItem = async (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     );
+    if (!updatedItem) {
+      return res.status(404).json({ message: "Item not found." });
+    }
     res.json(updatedItem);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "An error occurred on the server." });
+    if (err.name === "CastError") {
+      res.status(400).json({ message: "Invalid item ID." });
+    } else {
+      console.error(err);
+      res.status(500).json({ message: "An error occurred on the server." });
+    }
   }
 };

@@ -1,5 +1,7 @@
 // controllers/users.js
+
 const User = require("../models/user");
+const { BadRequestError } = require("../utils/errors");
 
 exports.getUsers = async (req, res) => {
   try {
@@ -19,8 +21,12 @@ exports.getUser = async (req, res) => {
     }
     res.json(user);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "An error occurred on the server." });
+    if (err.name === "CastError") {
+      res.status(400).json({ message: "Invalid user ID." });
+    } else {
+      console.error(err);
+      res.status(500).json({ message: "An error occurred on the server." });
+    }
   }
 };
 
@@ -33,7 +39,11 @@ exports.createUser = async (req, res) => {
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (err) {
-    console.error(err);
-    res.status(400).json({ message: "Invalid data passed to create user." });
+    if (err.name === "ValidationError") {
+      res.status(400).json({ message: "Invalid data passed to create user." });
+    } else {
+      console.error(err);
+      res.status(500).json({ message: "An error occurred on the server." });
+    }
   }
 };
