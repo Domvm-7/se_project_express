@@ -8,8 +8,6 @@ exports.getUsers = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "An error occurred on the server." });
   }
-  // Add return statement
-  return;
 };
 
 exports.getUser = async (req, res) => {
@@ -27,8 +25,6 @@ exports.getUser = async (req, res) => {
       res.status(500).json({ message: "An error occurred on the server." });
     }
   }
-  // Add return statement
-  return;
 };
 
 exports.createUser = async (req, res) => {
@@ -47,6 +43,4 @@ exports.createUser = async (req, res) => {
       res.status(500).json({ message: "An error occurred on the server." });
     }
   }
-  // Add return statement
-  return;
 };
