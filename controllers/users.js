@@ -43,4 +43,6 @@ exports.createUser = async (req, res) => {
       res.status(500).json({ message: "An error occurred on the server." });
     }
   }
+
+  return null; // or return; either way works to satisfy the linter
 };
