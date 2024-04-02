@@ -25,6 +25,7 @@ exports.getUser = async (req, res) => {
       res.status(500).json({ message: "An error occurred on the server." });
     }
   }
+  return null;
 };
 
 exports.createUser = async (req, res) => {
