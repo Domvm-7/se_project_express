@@ -15,7 +15,7 @@ router.use("/items", itemRouter);
 
 // Middleware for handling unknown routes (404)
 router.use((req, res) => {
-  res.status(404).send("Route not found");
+  res.status(404).send({ message: "Route not found" });
 });
 
 module.exports = router;
