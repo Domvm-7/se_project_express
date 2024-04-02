@@ -45,5 +45,5 @@ exports.createUser = async (req, res) => {
     }
   }
 
-  return null; // or return; either way works to satisfy the linter
+  return null;
 };
