@@ -1,9 +1,12 @@
-const BAD_REQUEST = 400;
-const NOT_FOUND = 404;
-const DEFAULT = 500;
+// utils/errors.js
+const STATUS_NOT_FOUND = 404;
+const STATUS_BAD_REQUEST = 400;
+const STATUS_CREATED = 201;
+const STATUS_DEFAULT = 500;
 
 module.exports = {
-  BAD_REQUEST,
-  NOT_FOUND,
-  DEFAULT,
+  STATUS_NOT_FOUND,
+  STATUS_BAD_REQUEST,
+  STATUS_CREATED,
+  STATUS_DEFAULT,
 };

@@ -1,6 +1,5 @@
+const { DEFAULT, BAD_REQUEST, NOT_FOUND } = require("../utils/errors");
 const ClothingItem = require("../models/clothingItem");
-
-const { DEFAULT, NOT_FOUND, BAD_REQUEST } = require("../utils/errors");
 
 exports.getItems = async (req, res) => {
   try {
