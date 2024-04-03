@@ -1,9 +1,6 @@
 const User = require("../models/user");
 
-const STATUS_DEFAULT = 500;
-const STATUS_NOT_FOUND = 404;
-const STATUS_BAD_REQUEST = 400;
-const STATUS_CREATED = 201;
+const { NOT_FOUND, BAD_REQUEST, DEFAULT } = require("../utils/errors");
 
 exports.getUsers = async (req, res) => {
   try {
@@ -11,9 +8,7 @@ exports.getUsers = async (req, res) => {
     res.json(users);
   } catch (err) {
     console.error(err);
-    res
-      .status(STATUS_DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    res.status(DEFAULT).json({ message: "An error occurred on the server." });
   }
 };
 
@@ -21,20 +16,17 @@ exports.getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {
-      return res.status(STATUS_NOT_FOUND).json({ message: "User not found." });
+      return res.status(NOT_FOUND).json({ message: "User not found." });
     }
     res.json(user);
   } catch (err) {
     if (err.name === "CastError") {
-      res.status(STATUS_BAD_REQUEST).json({ message: "Invalid user ID." });
+      res.status(BAD_REQUEST).json({ message: "Invalid user ID." });
     } else {
       console.error(err);
-      res
-        .status(STATUS_DEFAULT)
-        .json({ message: "An error occurred on the server." });
+      res.status(DEFAULT).json({ message: "An error occurred on the server." });
     }
   }
-  return null;
 };
 
 exports.createUser = async (req, res) => {
@@ -48,13 +40,11 @@ exports.createUser = async (req, res) => {
   } catch (err) {
     if (err.name === "ValidationError") {
       res
-        .status(STATUS_BAD_REQUEST)
+        .status(BAD_REQUEST)
         .json({ message: "Invalid data passed to create user." });
     } else {
       console.error(err);
-      res
-        .status(STATUS_DEFAULT)
-        .json({ message: "An error occurred on the server." });
+      res.status(DEFAULT).json({ message: "An error occurred on the server." });
     }
   }
   return null;

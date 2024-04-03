@@ -1,8 +1,6 @@
-// controllers/clothingItems.js
-
 const ClothingItem = require("../models/clothingItem");
 
-const DEFAULT = 500; // Added constant for default status code
+const { DEFAULT, NOT_FOUND, BAD_REQUEST } = require("../utils/errors");
 
 exports.getItems = async (req, res) => {
   try {
@@ -11,7 +9,7 @@ exports.getItems = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res
-      .status(DEFAULT) // Using created constant for status code
+      .status(DEFAULT)
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -29,12 +27,12 @@ exports.createItem = async (req, res) => {
   } catch (err) {
     if (err.name === "ValidationError") {
       return res
-        .status(400)
+        .status(BAD_REQUEST)
         .json({ message: "Invalid data passed to create item." });
     }
     console.error(err);
     return res
-      .status(DEFAULT) // Using created constant for status code
+      .status(DEFAULT)
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -43,16 +41,16 @@ exports.deleteItem = async (req, res) => {
   try {
     const deletedItem = await ClothingItem.findByIdAndRemove(req.params.itemId);
     if (!deletedItem) {
-      return res.status(404).json({ message: "Item not found." });
+      return res.status(NOT_FOUND).json({ message: "Item not found." });
     }
     return res.json({ message: "Item deleted." });
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(400).json({ message: "Invalid item ID." });
+      return res.status(BAD_REQUEST).json({ message: "Invalid item ID." });
     }
     console.error(err);
     return res
-      .status(DEFAULT) // Using created constant for status code
+      .status(DEFAULT)
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -65,16 +63,16 @@ exports.likeItem = async (req, res) => {
       { new: true },
     );
     if (!updatedItem) {
-      return res.status(404).json({ message: "Item not found." });
+      return res.status(NOT_FOUND).json({ message: "Item not found." });
     }
     return res.json(updatedItem);
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(400).json({ message: "Invalid item ID." });
+      return res.status(BAD_REQUEST).json({ message: "Invalid item ID." });
     }
     console.error(err);
     return res
-      .status(DEFAULT) // Using created constant for status code
+      .status(DEFAULT)
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -87,16 +85,16 @@ exports.dislikeItem = async (req, res) => {
       { new: true },
     );
     if (!updatedItem) {
-      return res.status(404).json({ message: "Item not found." });
+      return res.status(NOT_FOUND).json({ message: "Item not found." });
     }
     return res.json(updatedItem);
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(400).json({ message: "Invalid item ID." });
+      return res.status(BAD_REQUEST).json({ message: "Invalid item ID." });
     }
     console.error(err);
     return res
-      .status(DEFAULT) // Using created constant for status code
+      .status(DEFAULT)
       .json({ message: "An error occurred on the server." });
   }
 };
