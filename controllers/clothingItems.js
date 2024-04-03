@@ -2,6 +2,8 @@
 
 const ClothingItem = require("../models/clothingItem");
 
+const DEFAULT = 500; // Added constant for default status code
+
 exports.getItems = async (req, res) => {
   try {
     const items = await ClothingItem.find({});
@@ -9,7 +11,7 @@ exports.getItems = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res
-      .status(500)
+      .status(DEFAULT) // Using created constant for status code
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -32,7 +34,7 @@ exports.createItem = async (req, res) => {
     }
     console.error(err);
     return res
-      .status(500)
+      .status(DEFAULT) // Using created constant for status code
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -50,7 +52,7 @@ exports.deleteItem = async (req, res) => {
     }
     console.error(err);
     return res
-      .status(500)
+      .status(DEFAULT) // Using created constant for status code
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -72,7 +74,7 @@ exports.likeItem = async (req, res) => {
     }
     console.error(err);
     return res
-      .status(500)
+      .status(DEFAULT) // Using created constant for status code
       .json({ message: "An error occurred on the server." });
   }
 };
@@ -94,7 +96,7 @@ exports.dislikeItem = async (req, res) => {
     }
     console.error(err);
     return res
-      .status(500)
+      .status(DEFAULT) // Using created constant for status code
       .json({ message: "An error occurred on the server." });
   }
 };
