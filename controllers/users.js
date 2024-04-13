@@ -1,6 +1,12 @@
 const User = require("../models/user");
 
-const { DEFAULT, NOT_FOUND, BAD_REQUEST, CREATED } = require("../utils/errors");
+const {
+  DEFAULT,
+  NOT_FOUND,
+  BAD_REQUEST,
+  CREATED,
+  UNAUTHORIZED,
+} = require("../utils/errors");
 
 exports.getUsers = async (req, res) => {
   try {
