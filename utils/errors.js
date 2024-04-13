@@ -10,3 +10,7 @@ module.exports = {
   CREATED,
   DEFAULT,
 };
+
+module.exports = {
+  JWT_SECRET: "your_secret_key_here",
+};
