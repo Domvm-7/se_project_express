@@ -1,4 +1,5 @@
-// models/clothingItem.js
+// models/clothingItem.js //
+
 const mongoose = require("mongoose");
 
 const validator = require("validator");

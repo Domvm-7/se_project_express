@@ -1,4 +1,4 @@
-// controllers/clothingItems.js
+// controllers/clothingItems.js //
 
 const ClothingItem = require("../models/clothingItem");
 
