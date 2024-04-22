@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
       message: "Please enter a valid email address",
     },
   },
-  password: { type: String, required: true },
+  password: { type: String, required: true, select: false },
   avatar: {
     type: String,
     required: [true, "The avatar field is required."],

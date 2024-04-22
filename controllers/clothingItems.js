@@ -2,7 +2,14 @@
 
 const ClothingItem = require("../models/clothingItem");
 
-const { DEFAULT, CREATED, NOT_FOUND, BAD_REQUEST } = require("../utils/errors"); // Importing error constants
+const {
+  DEFAULT,
+  CREATED,
+  NOT_FOUND,
+  BAD_REQUEST,
+  NOT_FOUND,
+  BAD_REQUEST,
+} = require("../utils/errors"); // Importing error constants
 
 exports.getItems = async (req, res) => {
   try {

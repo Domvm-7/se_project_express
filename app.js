@@ -29,3 +29,7 @@ app.use("/", mainRouter);
 app.listen(PORT, () => {
   console.log(`Server is running port ${PORT}`);
 });
+
+const cors = require("cors");
+
+app.use(cors());
