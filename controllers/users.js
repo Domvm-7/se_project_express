@@ -1,7 +1,8 @@
-const User = require("../models/user");
+// controllers/users.js //
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../utils/config");
+const User = require("../models/user");
 const {
   DEFAULT,
   NOT_FOUND,
@@ -99,29 +100,41 @@ exports.getCurrentUser = async (req, res) => {
     if (!user) {
       return res.status(NOT_FOUND).json({ message: "User not found" });
     }
-    res.json(user);
+    return res.json(user);
   } catch (err) {
-    res.status(DEFAULT).json({ message: "Internal server error" });
+    return res.status(DEFAULT).json({ message: "Internal server error" });
   }
 };
 
 exports.updateUserProfile = async (req, res) => {
   try {
+    // Extract necessary data from the request body
+    const { name, email, avatar } = req.body;
+
+    // Get the user ID from the request object
     const userId = req.user._id;
-    const updates = req.body;
-    const allowedUpdates = ["name", "avatar"];
-    const isValidOperation = Object.keys(updates).every((update) =>
-      allowedUpdates.includes(update),
-    );
-    if (!isValidOperation) {
-      return res.status(BAD_REQUEST).json({ message: "Invalid updates" });
-    }
-    const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+
+    // Find the user in the database by ID
+    let user = await User.findById(userId);
+
+    // If user doesn't exist, return an error
     if (!user) {
       return res.status(NOT_FOUND).json({ message: "User not found" });
     }
+
+    // Update user's data
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.avatar = avatar || user.avatar;
+
+    // Save the updated user
+    user = await user.save();
+
+    // Return the updated user as response
     res.json(user);
   } catch (err) {
-    res.status(DEFAULT).json({ message: "Internal server error" });
+    // Handle errors
+    console.error(err);
+    res.status(DEFAULT).json({ message: "An error occurred on the server." });
   }
 };

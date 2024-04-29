@@ -1,7 +1,8 @@
-// routes/clothingItems.js
+// routes/clothingItems.js //
 
 const express = require("express");
 const router = express.Router();
+
 const {
   getItems,
   createItem,
@@ -11,12 +12,10 @@ const {
 } = require("../controllers/clothingItems");
 
 // Middleware for authorization
-const { authorize } = require("../middleware/auth");
+const { authorize } = require("../middlewares/auth"); // Make sure the path is correct
 
 // Routes
 router.get("/", getItems);
-
-// Routes protected with authorization
 router.post("/", authorize, createItem);
 router.delete("/:itemId", authorize, deleteItem);
 router.put("/:itemId/likes", authorize, likeItem);

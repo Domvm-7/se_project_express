@@ -1,8 +1,13 @@
+// routes/index.js //
 const express = require("express");
-const { DEFAULT } = require("../utils/errors");
+
+const { DEFAULT } = require("../utils/errors"); // Utilize DEFAULT if needed
+const { authMiddleware, getCurrentUser } = require("../middlewares/auth"); // Utilize authMiddleware and getCurrentUser if needed
+
 const router = express.Router();
-const authMiddleware = require("../middlewares/auth");
-const { createUser, login, getCurrentUser } = require("../controllers/users");
+
+// Importing user controllers
+const { createUser, login } = require("../controllers/users");
 
 // Public routes
 router.post("/signup", createUser);

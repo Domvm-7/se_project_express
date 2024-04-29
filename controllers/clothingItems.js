@@ -1,4 +1,4 @@
-// controllers/clothingItems.js
+// controllers/clothingItems.js //
 
 const ClothingItem = require("../models/clothingItem");
 const { DEFAULT, CREATED, NOT_FOUND, BAD_REQUEST } = require("../utils/errors");
