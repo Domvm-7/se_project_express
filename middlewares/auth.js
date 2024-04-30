@@ -1,9 +1,7 @@
-//middlewares/auth.js//
+// middlewares/auth.js //
 
 const jwt = require("jsonwebtoken");
-
 const { JWT_SECRET } = require("../utils/config");
-
 const User = require("../models/user"); // Import the User model
 
 const UNAUTHORIZED = 401;
@@ -39,9 +37,6 @@ const getCurrentUser = (req, res, next) => {
     req.currentUser = user;
     next();
   });
-
-  // Add a default return statement to handle cases where User.findById doesn't return immediately
-  return;
 };
 
 module.exports = { authMiddleware, getCurrentUser };
