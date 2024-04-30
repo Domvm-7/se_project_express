@@ -9,6 +9,7 @@ const {
   BAD_REQUEST,
   CREATED,
   UNAUTHORIZED,
+  CONFLICT,
 } = require("../utils/errors");
 
 exports.createUser = async (req, res) => {
@@ -17,7 +18,7 @@ exports.createUser = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
-        .status(BAD_REQUEST)
+        .status(CONFLICT)
         .json({ message: "User with this email already exists." });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,7 +29,13 @@ exports.createUser = async (req, res) => {
       avatar,
     });
     const savedUser = await newUser.save();
-    return res.status(CREATED).json(savedUser); // Added return statement
+    // Return user without password
+    return res.status(CREATED).json({
+      _id: savedUser._id,
+      name: savedUser.name,
+      email: savedUser.email,
+      avatar: savedUser.avatar,
+    });
   } catch (err) {
     if (err.name === "ValidationError") {
       return res
@@ -84,32 +91,17 @@ exports.getCurrentUser = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
   try {
-    // Extract necessary data from the request body
-    const { name, email, avatar } = req.body;
-
-    // Get the user ID from the request object
+    const { name, avatar } = req.body;
     const userId = req.user._id;
-
-    // Find the user in the database by ID
     let user = await User.findById(userId);
-
-    // If user doesn't exist, return an error
     if (!user) {
       return res.status(NOT_FOUND).json({ message: "User not found" });
     }
-
-    // Update user's data
     user.name = name || user.name;
-    user.email = email || user.email;
     user.avatar = avatar || user.avatar;
-
-    // Save the updated user
     user = await user.save();
-
-    // Return the updated user as response
-    return res.json(user); // Added return statement
+    return res.json(user);
   } catch (err) {
-    // Handle errors
     console.error(err);
     return res
       .status(DEFAULT)

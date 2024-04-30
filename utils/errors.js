@@ -6,6 +6,7 @@ const BAD_REQUEST = 400;
 const CREATED = 201;
 const DEFAULT = 500;
 const UNAUTHORIZED = 401;
+const CONFLICT = 409; // Added CONFLICT status code
 
 // Secret key for JWT token
 const JWT_SECRET = "your_secret_key_here";
@@ -16,5 +17,6 @@ module.exports = {
   CREATED,
   DEFAULT,
   UNAUTHORIZED,
+  CONFLICT, // Added CONFLICT export
   JWT_SECRET,
 };
