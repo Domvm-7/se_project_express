@@ -37,6 +37,9 @@ const getCurrentUser = (req, res, next) => {
     req.currentUser = user;
     next(); // Call next() here instead of returning directly
   });
+
+  // Ensure a default return statement in case User.findById doesn't return immediately
+  return;
 };
 
 module.exports = { authMiddleware, getCurrentUser };
