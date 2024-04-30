@@ -35,7 +35,7 @@ const getCurrentUser = (req, res, next) => {
     }
 
     req.currentUser = user;
-    next();
+    next(); // Call next() here instead of returning directly
   });
 };
 
