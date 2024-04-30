@@ -11,36 +11,6 @@ const {
   UNAUTHORIZED,
 } = require("../utils/errors");
 
-exports.getUsers = async (req, res) => {
-  try {
-    const users = await User.find({});
-    return res.json(users); // Added return statement
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
-  }
-};
-
-exports.getUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.userId);
-    if (!user) {
-      return res.status(NOT_FOUND).json({ message: "User not found." });
-    }
-    return res.json(user); // Added return statement
-  } catch (err) {
-    if (err.name === "CastError") {
-      return res.status(BAD_REQUEST).json({ message: "Invalid user ID." });
-    }
-    console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
-  }
-};
-
 exports.createUser = async (req, res) => {
   try {
     const { name, email, password, avatar } = req.body;
