@@ -1,4 +1,5 @@
-//routes/index.js//
+//  routes/index.js  //
+
 const express = require("express");
 
 const { authMiddleware, getCurrentUser } = require("../middlewares/auth"); // Importing from middlewares.js
