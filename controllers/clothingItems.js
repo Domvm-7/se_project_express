@@ -41,21 +41,27 @@ exports.createItem = async (req, res) => {
 exports.deleteItem = async (req, res) => {
   try {
     const itemToDelete = await ClothingItem.findById(req.params.itemId);
+
     if (!itemToDelete) {
       return res.status(NOT_FOUND).json({ message: "Item not found." });
     }
+
     if (itemToDelete.owner.toString() !== req.user._id) {
       return res
-        .status(403)
+        .status(UNAUTHORIZED) // Changed status code to UNAUTHORIZED constant
         .json({ message: "You are not authorized to delete this item." });
     }
+
     await itemToDelete.deleteOne();
+
     return res.json({ message: "Item deleted." });
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(BAD_REQUEST).json({ message: "Invalid item ID." });
     }
+
     console.error(err);
+
     return res
       .status(DEFAULT)
       .json({ message: "An error occurred on the server." });
