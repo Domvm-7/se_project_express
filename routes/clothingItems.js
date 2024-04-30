@@ -13,13 +13,13 @@ const {
 } = require("../controllers/clothingItems");
 
 // Middleware for authorization
-const { authorize } = require("../middlewares/auth"); // Make sure the path is correct
+const { authMiddleware } = require("../middlewares/auth"); // Make sure the path is correct
 
 // Routes
 router.get("/", getItems);
-router.post("/", authorize, createItem);
-router.delete("/:itemId", authorize, deleteItem);
-router.put("/:itemId/likes", authorize, likeItem);
-router.delete("/:itemId/likes", authorize, dislikeItem);
+router.post("/", authMiddleware, createItem);
+router.delete("/:itemId", authMiddleware, deleteItem);
+router.put("/:itemId/likes", authMiddleware, likeItem);
+router.delete("/:itemId/likes", authMiddleware, dislikeItem);
 
 module.exports = router;
