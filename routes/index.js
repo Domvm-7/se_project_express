@@ -1,29 +1,21 @@
-// routes/index.js //
 const express = require("express");
-
-const { DEFAULT } = require("../utils/errors"); // Utilize DEFAULT if needed
-const { authMiddleware, getCurrentUser } = require("../middlewares/auth"); // Utilize authMiddleware and getCurrentUser if needed
+const { authMiddleware, getCurrentUser } = require("../middlewares"); // Importing from middlewares.js
 
 const router = express.Router();
 
-// Importing user controllers
 const { createUser, login } = require("../controllers/users");
+const userRouter = require("./users");
+const itemRouter = require("./clothingItems");
+const errors = require("../utils/errors");
 
-// Public routes
 router.post("/signup", createUser);
 router.post("/signin", login);
 
-// Importing user routes
-const userRouter = require("./users");
-router.use("/users", userRouter);
-
-// Importing item routes
-const itemRouter = require("./clothingItems");
+router.use("/users", authMiddleware, getCurrentUser, userRouter);
 router.use("/items", itemRouter);
 
-// Middleware for handling unknown routes (404)
-router.use((req, res, next) => {
-  res.status(404).json({ message: "Route not found" });
+router.use((req, res) => {
+  res.status(errors.NOT_FOUND).json({ message: "Route not found" });
 });
 
 module.exports = router;

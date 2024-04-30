@@ -9,7 +9,6 @@ const {
   getUser,
   createUser,
   login,
-  getCurrentUser,
   updateUserProfile,
 } = require("../controllers/users");
 
@@ -18,7 +17,7 @@ router.get("/", getUsers);
 router.get("/:userId", getUser);
 router.post("/", createUser);
 router.post("/login", login);
-router.get("/me", getCurrentUser);
+router.get("/me", getCurrentUser); // Only one declaration needed
 router.put("/me", updateUserProfile);
 router.get("/me", authMiddleware, getCurrentUser);
 
