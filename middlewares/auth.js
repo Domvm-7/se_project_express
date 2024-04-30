@@ -19,6 +19,7 @@ const authMiddleware = (req, res, next) => {
   } catch (err) {
     return res.status(UNAUTHORIZED).json({ message: "Unauthorized" });
   }
+  return next();
 };
 
 const getCurrentUser = (req, res, next) => {
