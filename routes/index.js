@@ -1,11 +1,7 @@
-//  routes/index.js  //
-
+// routes/index.js
 const express = require("express");
-
-const { authMiddleware, getCurrentUser } = require("../middlewares/auth"); // Importing from middlewares.js
-
+const { authMiddleware } = require("../middlewares/auth");
 const router = express.Router();
-
 const { createUser, login } = require("../controllers/users");
 const userRouter = require("./users");
 const itemRouter = require("./clothingItems");
@@ -14,7 +10,10 @@ const errors = require("../utils/errors");
 router.post("/signup", createUser);
 router.post("/signin", login);
 
-router.use("/users", authMiddleware, getCurrentUser, userRouter);
+// Apply auth middleware before routing to userRouter
+router.use("/users", authMiddleware);
+router.use("/users", userRouter);
+
 router.use("/items", itemRouter);
 
 router.use((req, res) => {
