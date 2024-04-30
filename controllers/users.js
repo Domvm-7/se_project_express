@@ -33,12 +33,11 @@ exports.getUser = async (req, res) => {
   } catch (err) {
     if (err.name === "CastError") {
       return res.status(BAD_REQUEST).json({ message: "Invalid user ID." });
-    } else {
-      console.error(err);
-      return res
-        .status(DEFAULT)
-        .json({ message: "An error occurred on the server." });
     }
+    console.error(err);
+    return res
+      .status(DEFAULT)
+      .json({ message: "An error occurred on the server." });
   }
 };
 
@@ -65,12 +64,11 @@ exports.createUser = async (req, res) => {
       return res
         .status(BAD_REQUEST)
         .json({ message: "Invalid data passed to create user." });
-    } else {
-      console.error(err);
-      return res
-        .status(DEFAULT)
-        .json({ message: "An error occurred on the server." });
     }
+    console.error(err);
+    return res
+      .status(DEFAULT)
+      .json({ message: "An error occurred on the server." });
   }
 };
 

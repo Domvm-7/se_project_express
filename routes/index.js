@@ -1,5 +1,7 @@
+//routes/index.js//
 const express = require("express");
-const { authMiddleware, getCurrentUser } = require("../middlewares"); // Importing from middlewares.js
+
+const { authMiddleware, getCurrentUser } = require("../middlewares/auth"); // Importing from middlewares.js
 
 const router = express.Router();
 
