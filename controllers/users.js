@@ -97,10 +97,22 @@ exports.updateUserProfile = async (req, res) => {
     if (!user) {
       return res.status(NOT_FOUND).json({ message: "User not found" });
     }
+    // Update user properties
     user.name = name || user.name;
     user.avatar = avatar || user.avatar;
-    user = await user.save();
-    return res.json(user);
+
+    // Save the updated user
+    try {
+      user = await user.save();
+      return res.json(user);
+    } catch (err) {
+      if (err.name === "ValidationError") {
+        return res
+          .status(BAD_REQUEST)
+          .json({ message: "Invalid data passed to update user." });
+      }
+      throw err;
+    }
   } catch (err) {
     console.error(err);
     return res
