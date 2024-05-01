@@ -7,7 +7,7 @@ const { updateUserProfile, getCurrentUser } = require("../controllers/users");
 
 // Define routes
 
-router.get("/me", authMiddleware);
-router.patch("/me", authMiddleware, updateUserProfile, getCurrentUser);
+router.get("/me", authMiddleware, getCurrentUser);
+router.patch("/me", authMiddleware, updateUserProfile);
 
 module.exports = router;

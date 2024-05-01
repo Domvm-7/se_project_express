@@ -6,7 +6,7 @@ const {
   CREATED,
   NOT_FOUND,
   BAD_REQUEST,
-  FORBIDDNEN,
+  FORBIDDEN,
 } = require("../utils/errors");
 
 exports.getItems = async (req, res) => {
@@ -54,7 +54,7 @@ exports.deleteItem = async (req, res) => {
 
     if (itemToDelete.owner.toString() !== req.user._id) {
       return res
-        .status(FORBIDDNEN) // Changed status code to UNAUTHORIZED constant
+        .status(FORBIDDEN) // Changed status code to UNAUTHORIZED constant
         .json({ message: "You are not authorized to delete this item." });
     }
 
