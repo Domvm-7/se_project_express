@@ -1,7 +1,13 @@
 // controllers/clothingItems.js //
 
 const ClothingItem = require("../models/clothingItem");
-const { DEFAULT, CREATED, NOT_FOUND, BAD_REQUEST } = require("../utils/errors");
+const {
+  DEFAULT,
+  CREATED,
+  NOT_FOUND,
+  BAD_REQUEST,
+  UNAUTHORIZED,
+} = require("../utils/errors");
 
 exports.getItems = async (req, res) => {
   try {
