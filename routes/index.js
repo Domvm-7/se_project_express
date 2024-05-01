@@ -12,7 +12,6 @@ router.post("/signup", createUser);
 router.post("/signin", login);
 
 // Apply auth middleware before routing to userRouter
-router.use("/users", authMiddleware);
 router.use("/users", userRouter);
 
 router.use("/items", itemRouter);
