@@ -1,9 +1,7 @@
 // middlewares/auth.js //
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../utils/config");
+const { JWT_SECRET, UNAUTHORIZED } = require("../utils/config");
 const User = require("../models/user");
-
-const UNAUTHORIZED = 401;
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.replace("Bearer ", "");
@@ -22,21 +20,4 @@ const authMiddleware = (req, res, next) => {
   return next();
 };
 
-const getCurrentUser = (req, res, next) => {
-  const userId = req.user.id;
-
-  User.findById(userId, (err, user) => {
-    if (err) {
-      return res.status(500).json({ message: "Error fetching user" });
-    }
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    req.currentUser = user;
-    return next();
-  });
-};
-
-module.exports = { authMiddleware, getCurrentUser };
+module.exports = { authMiddleware };

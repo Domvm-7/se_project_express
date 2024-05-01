@@ -13,7 +13,7 @@ const {
 // Define routes
 router.post("/", createUser);
 router.post("/login", login);
-router.get("/me", authMiddleware, getCurrentUser);
+router.get("/me", authMiddleware);
 router.put("/me", authMiddleware, updateUserProfile);
 
 module.exports = router;
