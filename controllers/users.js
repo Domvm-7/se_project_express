@@ -94,27 +94,25 @@ exports.updateUserProfile = async (req, res) => {
     const { name, avatar } = req.body;
     const userId = req.user._id;
     let user = await User.findById(userId);
+
     if (!user) {
       return res.status(NOT_FOUND).json({ message: "User not found" });
     }
+
     // Update user properties
     user.name = name || user.name;
     user.avatar = avatar || user.avatar;
 
     // Save the updated user
-    try {
-      user = await user.save();
-      return res.json(user);
-    } catch (err) {
-      if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST)
-          .json({ message: "Invalid data passed to update user." });
-      }
-      throw err;
-    }
+    user = await user.save();
+    return res.json(user);
   } catch (err) {
     console.error(err);
+    if (err.name === "ValidationError") {
+      return res
+        .status(BAD_REQUEST)
+        .json({ message: "Invalid data passed to update user." });
+    }
     return res
       .status(DEFAULT)
       .json({ message: "An error occurred on the server." });

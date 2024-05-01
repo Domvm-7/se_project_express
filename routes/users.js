@@ -3,11 +3,11 @@ const express = require("express");
 
 const router = express.Router();
 const { authMiddleware } = require("../middlewares/auth");
-const { createUser, updateUserProfile } = require("../controllers/users");
+const { updateUserProfile, getCurrentUser } = require("../controllers/users");
 
 // Define routes
-router.post("/", createUser);
+
 router.get("/me", authMiddleware);
-router.patch("/me", authMiddleware, updateUserProfile);
+router.patch("/me", authMiddleware, updateUserProfile, getCurrentUser);
 
 module.exports = router;
