@@ -9,6 +9,7 @@ const {
   BAD_REQUEST,
   CREATED,
   CONFLICT,
+  UNAUTHORIZED,
 } = require("../utils/errors");
 
 exports.createUser = async (req, res) => {
@@ -54,13 +55,13 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res
-        .status(BAD_REQUEST)
+        .status(UNAUTHORIZED)
         .json({ message: "Invalid email or password." });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res
-        .status(BAD_REQUEST)
+        .status(UNAUTHORIZED)
         .json({ message: "Invalid email or password." });
     }
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
@@ -70,7 +71,7 @@ exports.login = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res
-      .status(BAD_REQUEST)
+      .status(DEFAULT)
       .json({ message: "An error occurred on the server." });
   }
 };
