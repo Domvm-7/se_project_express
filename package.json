@@ -1,7 +1,7 @@
 {
   "name": "se_project_express",
   "version": "0.1.0",
-  "description": "Sprint 12 Project",
+  "description": "Sprint 13 Project",
   "main": "app.js",
   "scripts": {
     "lint": "npx eslint .",
