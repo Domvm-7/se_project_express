@@ -8,7 +8,6 @@ const {
   NOT_FOUND,
   BAD_REQUEST,
   CREATED,
-  UNAUTHORIZED,
   CONFLICT,
 } = require("../utils/errors");
 
@@ -71,7 +70,7 @@ exports.login = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res
-      .status(DEFAULT)
+      .status(BAD_REQUEST)
       .json({ message: "An error occurred on the server." });
   }
 };
