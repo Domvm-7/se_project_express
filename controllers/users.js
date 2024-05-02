@@ -55,13 +55,13 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res
-        .status(UNAUTHORIZED)
+        .status(BAD_REQUEST)
         .json({ message: "Invalid email or password." });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res
-        .status(UNAUTHORIZED)
+        .status(BAD_REQUEST)
         .json({ message: "Invalid email or password." });
     }
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
