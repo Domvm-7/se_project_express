@@ -7,8 +7,8 @@ const userRouter = require("./users");
 const itemRouter = require("./clothingItems");
 const errors = require("../utils/errors");
 
-router.post("/signup", createUser);
-router.post("/signin", login);
+router.post("/signUp", createUser);
+router.post("/signIn", login);
 
 // Apply auth middleware before routing to userRouter
 router.use("/users", userRouter);
