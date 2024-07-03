@@ -1,6 +1,6 @@
-// middlewares/auth.js //
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, UNAUTHORIZED } = require("../utils/config");
+const { JWT_SECRET } = require("../utils/config");
+const { UNAUTHORIZED } = require("../utils/errors");
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.replace("Bearer ", "");
