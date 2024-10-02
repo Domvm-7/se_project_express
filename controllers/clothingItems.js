@@ -1,5 +1,4 @@
-// controllers/clothingItems.js //
-
+// controllers/clothingItems.js
 const ClothingItem = require("../models/clothingItem");
 const {
   DEFAULT,
@@ -9,19 +8,20 @@ const {
   FORBIDDEN,
 } = require("../utils/errors");
 
-exports.getItems = async (req, res) => {
+exports.getItems = async (req, res, next) => {
   try {
     const items = await ClothingItem.find({});
     return res.json(items);
   } catch (err) {
     console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };
 
-exports.createItem = async (req, res) => {
+exports.createItem = async (req, res, next) => {
   try {
     const newItem = new ClothingItem({
       name: req.body.name,
@@ -33,48 +33,46 @@ exports.createItem = async (req, res) => {
     return res.status(CREATED).json(savedItem);
   } catch (err) {
     if (err.name === "ValidationError") {
-      return res
-        .status(BAD_REQUEST)
-        .json({ message: "Invalid data passed to create item." });
+      return next({
+        status: BAD_REQUEST,
+        message: "Invalid data passed to create item.",
+      });
     }
     console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };
 
-exports.deleteItem = async (req, res) => {
+exports.deleteItem = async (req, res, next) => {
   try {
     const itemToDelete = await ClothingItem.findById(req.params.itemId);
-
     if (!itemToDelete) {
-      return res.status(NOT_FOUND).json({ message: "Item not found." });
+      return next({ status: NOT_FOUND, message: "Item not found." });
     }
-
     if (itemToDelete.owner.toString() !== req.user._id) {
-      return res
-        .status(FORBIDDEN) // Changed status code to UNAUTHORIZED constant
-        .json({ message: "You are not authorized to delete this item." });
+      return next({
+        status: FORBIDDEN,
+        message: "You are not authorized to delete this item.",
+      });
     }
-
     await itemToDelete.deleteOne();
-
     return res.json({ message: "Item deleted." });
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(BAD_REQUEST).json({ message: "Invalid item ID." });
+      return next({ status: BAD_REQUEST, message: "Invalid item ID." });
     }
-
     console.error(err);
-
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };
 
-exports.likeItem = async (req, res) => {
+exports.likeItem = async (req, res, next) => {
   try {
     const updatedItem = await ClothingItem.findByIdAndUpdate(
       req.params.itemId,
@@ -82,21 +80,22 @@ exports.likeItem = async (req, res) => {
       { new: true },
     );
     if (!updatedItem) {
-      return res.status(NOT_FOUND).json({ message: "Item not found." });
+      return next({ status: NOT_FOUND, message: "Item not found." });
     }
     return res.json(updatedItem);
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(BAD_REQUEST).json({ message: "Invalid item ID." });
+      return next({ status: BAD_REQUEST, message: "Invalid item ID." });
     }
     console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };
 
-exports.dislikeItem = async (req, res) => {
+exports.dislikeItem = async (req, res, next) => {
   try {
     const updatedItem = await ClothingItem.findByIdAndUpdate(
       req.params.itemId,
@@ -104,16 +103,17 @@ exports.dislikeItem = async (req, res) => {
       { new: true },
     );
     if (!updatedItem) {
-      return res.status(NOT_FOUND).json({ message: "Item not found." });
+      return next({ status: NOT_FOUND, message: "Item not found." });
     }
     return res.json(updatedItem);
   } catch (err) {
     if (err.name === "CastError") {
-      return res.status(BAD_REQUEST).json({ message: "Invalid item ID." });
+      return next({ status: BAD_REQUEST, message: "Invalid item ID." });
     }
     console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };

@@ -1,4 +1,4 @@
-// controllers/users.js //
+// controllers/users.js
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { JWT_SECRET } = require("../utils/config");
@@ -12,14 +12,15 @@ const {
   UNAUTHORIZED,
 } = require("../utils/errors");
 
-exports.createUser = async (req, res) => {
+exports.createUser = async (req, res, next) => {
   try {
     const { name, email, password, avatar } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res
-        .status(CONFLICT)
-        .json({ message: "User with this email already exists." });
+      return next({
+        status: CONFLICT,
+        message: "User with this email already exists.",
+      });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
@@ -29,7 +30,6 @@ exports.createUser = async (req, res) => {
       avatar,
     });
     const savedUser = await newUser.save();
-    // Return user without password
     return res.status(CREATED).json({
       _id: savedUser._id,
       name: savedUser.name,
@@ -38,83 +38,85 @@ exports.createUser = async (req, res) => {
     });
   } catch (err) {
     if (err.name === "ValidationError") {
-      return res
-        .status(BAD_REQUEST)
-        .json({ message: "Invalid data passed to create user." });
+      return next({
+        status: BAD_REQUEST,
+        message: "Invalid data passed to create user.",
+      });
     }
     console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
-      return res
-        .status(UNAUTHORIZED)
-        .json({ message: "Invalid email or password." });
+      return next({
+        status: UNAUTHORIZED,
+        message: "Invalid email or password.",
+      });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res
-        .status(UNAUTHORIZED)
-        .json({ message: "Invalid email or password." });
+      return next({
+        status: UNAUTHORIZED,
+        message: "Invalid email or password.",
+      });
     }
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
       expiresIn: "7d",
     });
-    return res.json({ token }); // Added return statement
+    return res.json({ token });
   } catch (err) {
     console.error(err);
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };
 
-exports.getCurrentUser = async (req, res) => {
+exports.getCurrentUser = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(NOT_FOUND).json({ message: "User not found" });
+      return next({ status: NOT_FOUND, message: "User not found" });
     }
-    return res.json(user); // Added return statement
+    return res.json(user);
   } catch (err) {
-    return res.status(DEFAULT).json({ message: "Internal server error" });
+    return next({ status: DEFAULT, message: "Internal server error" });
   }
 };
 
-exports.updateUserProfile = async (req, res) => {
+exports.updateUserProfile = async (req, res, next) => {
   try {
     const { name, avatar } = req.body;
     const userId = req.user._id;
     let user = await User.findById(userId);
-
     if (!user) {
-      return res.status(NOT_FOUND).json({ message: "User not found" });
+      return next({ status: NOT_FOUND, message: "User not found" });
     }
-
-    // Update user properties
     user.name = name || user.name;
     user.avatar = avatar || user.avatar;
-
-    // Save the updated user
     user = await user.save();
     return res.json(user);
   } catch (err) {
     console.error(err);
     if (err.name === "ValidationError") {
-      return res
-        .status(BAD_REQUEST)
-        .json({ message: "Invalid data passed to update user." });
+      return next({
+        status: BAD_REQUEST,
+        message: "Invalid data passed to update user.",
+      });
     }
-    return res
-      .status(DEFAULT)
-      .json({ message: "An error occurred on the server." });
+    return next({
+      status: DEFAULT,
+      message: "An error occurred on the server.",
+    });
   }
 };

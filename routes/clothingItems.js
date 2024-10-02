@@ -1,9 +1,7 @@
-// routes/clothingItems.js //
-
+// routes/clothingItems.js
 const express = require("express");
-
+const { celebrate, Joi, Segments } = require("celebrate");
 const router = express.Router();
-
 const {
   getItems,
   createItem,
@@ -11,15 +9,32 @@ const {
   likeItem,
   dislikeItem,
 } = require("../controllers/clothingItems");
+const { authMiddleware } = require("../middlewares/auth");
 
-// Middleware for authorization
-const { authMiddleware } = require("../middlewares/auth"); // Make sure the path is correct
+// Validation schemas
+const itemIdSchema = celebrate({
+  [Segments.PARAMS]: Joi.object().keys({
+    itemId: Joi.string().hex().length(24).required(),
+  }),
+});
+
+const createItemSchema = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: Joi.string().required(),
+    weather: Joi.string().required(),
+    imageUrl: Joi.string().uri().required(),
+  }),
+});
 
 // Routes
 router.get("/", getItems);
-router.post("/", authMiddleware, createItem);
-router.delete("/:itemId", authMiddleware, deleteItem);
-router.put("/:itemId/likes", authMiddleware, likeItem);
-router.delete("/:itemId/likes", authMiddleware, dislikeItem);
+
+router.post("/", authMiddleware, createItemSchema, createItem);
+
+router.delete("/:itemId", authMiddleware, itemIdSchema, deleteItem);
+
+router.put("/:itemId/likes", authMiddleware, itemIdSchema, likeItem);
+
+router.delete("/:itemId/likes", authMiddleware, itemIdSchema, dislikeItem);
 
 module.exports = router;
