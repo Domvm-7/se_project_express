@@ -30,16 +30,8 @@ app.use(cors());
 // Main routes
 app.use("/", mainRouter);
 
-// Authentication middleware (can be applied globally if needed)
-app.use(authMiddleware); // Apply globally if all routes need auth, or apply to specific routes in mainRouter
-
 // Handle validation errors from celebrate
 app.use(errors());
-
-// Handle unknown routes (404) - Centralized error handling for unknown routes
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
 
 // Generic error handler for uncaught errors (optional)
 app.use((err, req, res, next) => {

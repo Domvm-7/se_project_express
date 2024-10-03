@@ -30,7 +30,7 @@ exports.createItem = async (req, res, next) => {
       owner: req.user._id,
     });
     const savedItem = await newItem.save();
-    return res.status(CREATED).json(savedItem);
+    return res.status(201).json(savedItem);
   } catch (err) {
     if (err.name === "ValidationError") {
       return next({
