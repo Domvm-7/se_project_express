@@ -13,6 +13,7 @@ const signUpSchema = celebrate({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
     name: Joi.string().min(2).max(30).required(),
+    avatar: Joi.string().uri().required(),
   }),
 });
 

@@ -20,8 +20,8 @@ const itemIdSchema = celebrate({
 
 const createItemSchema = celebrate({
   [Segments.BODY]: Joi.object().keys({
-    name: Joi.string().required(),
-    weather: Joi.string().min(2).max(30).required(),
+    name: Joi.string().min(2).max(30).required(),
+    weather: Joi.string().valid("hot", "warm", "cold").required(),
     imageUrl: Joi.string().uri().required(),
   }),
 });
