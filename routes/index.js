@@ -1,6 +1,6 @@
-// routes/index.js
+// index.js
 const express = require("express");
-const { celebrate, Joi, Segments, errors } = require("celebrate");
+const { celebrate, Joi, Segments } = require("celebrate");
 const router = express.Router();
 const { createUser, login } = require("../controllers/users");
 const userRouter = require("./users");
@@ -35,13 +35,6 @@ router.use("/items", itemRouter);
 // Handle 404 errors
 router.use((req, res, next) => {
   next({ status: NOT_FOUND, message: "Not Found" });
-});
-
-// Centralized error handling middleware
-router.use((err, req, res, next) => {
-  const statusCode = err.status || 500;
-  const message = err.message || "Internal Server Error";
-  return res.status(statusCode).json({ message });
 });
 
 module.exports = router;

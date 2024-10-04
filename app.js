@@ -1,15 +1,13 @@
-// app.js //
+// app.js
 const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const { errors } = require("celebrate"); // Celebrate error handler for validation errors
 const mainRouter = require("./routes/index");
-const { UNAUTHORIZED } = require("./utils/errors"); // For consistent error responses
-const { authMiddleware } = require("./middlewares/auth"); // Ensure correct path to auth middleware
+const { PORT = 3001 } = process.env;
 
 const app = express();
-const { PORT = 3001 } = process.env;
 
 // Connect to MongoDB
 mongoose
@@ -33,10 +31,16 @@ app.use("/", mainRouter);
 // Handle validation errors from celebrate
 app.use(errors());
 
-// Generic error handler for uncaught errors (optional)
+// Centralized error handler for all uncaught errors
 app.use((err, req, res, next) => {
   console.error("Internal server error:", err);
-  res.status(500).json({ message: "Internal server error" });
+
+  // Default error response
+  const statusCode = err.status || 500;
+  const message = err.message || "Internal server error";
+
+  // Send JSON response
+  res.status(statusCode).json({ message });
 });
 
 // Start the server
