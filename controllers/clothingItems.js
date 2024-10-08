@@ -2,7 +2,6 @@
 const ClothingItem = require("../models/clothingItem");
 const {
   DEFAULT,
-  CREATED,
   NOT_FOUND,
   BAD_REQUEST,
   FORBIDDEN,

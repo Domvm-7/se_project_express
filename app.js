@@ -64,7 +64,7 @@ app.use("/", mainRouter);
 app.use(errors());
 
 // Centralized error handler for uncaught errors
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   logger.error(`Error occurred: ${err.message}`, { stack: err.stack });
 
   // Default error response
