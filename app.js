@@ -7,9 +7,7 @@ const { errors } = require("celebrate");
 const morgan = require("morgan");
 const winston = require("winston");
 const mainRouter = require("./routes/index");
-
 const { PORT = 3001 } = process.env;
-
 const app = express();
 
 // Set up Winston logger for application logs and errors
@@ -64,7 +62,7 @@ app.use("/", mainRouter);
 app.use(errors());
 
 // Centralized error handler for uncaught errors
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   logger.error(`Error occurred: ${err.message}`, { stack: err.stack });
 
   // Default error response
@@ -73,6 +71,9 @@ app.use((err, req, res) => {
 
   // Send JSON response
   res.status(statusCode).json({ message });
+
+  // Call next to avoid eslint errors or to allow further handling
+  next();
 });
 
 // Start the server
