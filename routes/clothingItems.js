@@ -1,6 +1,7 @@
 // routes/clothingItems.js
 const express = require("express");
 const { celebrate, Joi, Segments } = require("celebrate");
+
 const router = express.Router();
 const {
   getItems,

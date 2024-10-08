@@ -1,6 +1,7 @@
 // routes/users.js
 const express = require("express");
 const { celebrate, Joi, Segments } = require("celebrate");
+
 const router = express.Router();
 const { authMiddleware } = require("../middlewares/auth");
 const { updateUserProfile, getCurrentUser } = require("../controllers/users");

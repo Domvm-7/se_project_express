@@ -1,6 +1,7 @@
 // index.js
 const express = require("express");
 const { celebrate, Joi, Segments } = require("celebrate");
+
 const router = express.Router();
 const { createUser, login } = require("../controllers/users");
 const userRouter = require("./users");
